@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: core-service
+  labels:
+    app: core-service
+  namespace: urbedigital
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: core-service
+  template:
+    metadata:
+      labels:
+        app: core-service
+    spec:
+      containers:
+      - name: core-service
+        image: core-service:dev
+        env:
+        - name: "SPRING_PROFILES_ACTIVE"
+          value: "dev"
+        - name: "DBURBE_URL_DEV"
+          value: "jdbc:jtds:sybase://10.200.12.180:8100/dburbe"
+        - name: "DBURBE_USR_DEV"
+          value: "dsoles"
+        - name: "DBURBE_PWD_DEV"
+          value: "12345678"
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8094
+        resources:
+          limits:
+            memory: "512Mi"
